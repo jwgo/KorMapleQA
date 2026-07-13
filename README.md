@@ -91,8 +91,9 @@ Smart-Connections-class, mem0) with methodology and how-to-submit is in
 |---|---|---|
 | BM25 (this repo's `baseline_bm25.py`) | 0.741 | pure-Python floor, Hangul bigrams |
 | dense vector only (MiniLM-384d) | 0.135 | Korean is hard for a small English-leaning embedder |
-| a strong hybrid (semantic + Korean BM25 + link graph), local | 0.79 | zero API keys |
-| the same hybrid with Gemini embeddings | 0.91 | |
+| a strong hybrid (semantic + Korean BM25 + link graph), local MiniLM | 0.79 | zero keys, no daemon, instant |
+| the same hybrid, local Harrier-0.6B (Q8, Ollama) | 0.85 | zero keys, stronger multilingual embedder |
+| the same hybrid with Gemini embeddings | 0.91 | API |
 
 2-hop full-support is ~0.14–0.19 for everything measured, including
 LLM-pipeline systems: the answer note carries almost no signal of its own

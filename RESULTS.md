@@ -24,7 +24,8 @@ runtime). Read the labels before ranking.
 | system | doc@1 | doc@8 | latency (p50) | setup |
 |---|---|---|---|---|
 | hybrid (semantic + Korean BM25 + link graph), API embeddings | 0.664 | **0.906** | ~13 ms | Gemini `gemini-embedding-001`, **v1 phrasing*** |
-| hybrid, local embedder | 0.536 | 0.788 | ~18 ms | fastembed MiniLM-384d, zero keys |
+| hybrid, local embedder (Harrier-0.6B Q8) | 0.612 | 0.853 | ~102 ms | Ollama, Microsoft Harrier (Qwen3-based multilingual), zero keys |
+| hybrid, local embedder (MiniLM-384d) | 0.536 | 0.788 | ~18 ms | fastembed, zero keys, no daemon |
 | **BM25** (`scripts/baseline_bm25.py`) | 0.374 | 0.741 | ~1 ms | pure Python, Hangul bigrams, in this repo |
 | Smart-Connections *class* | 0.072 | 0.204 | ~15 ms | its default `bge-micro-v2`, cosine only, shared runtime |
 | Omnisearch (Obsidian) | 0.111 | 0.148 | ~1 ms | real MiniSearch + its exact config, headless |
@@ -42,7 +43,10 @@ Reading it: lexical-only tools (Omnisearch, qmd-search) return almost nothing
 on natural-language and typo'd Korean questions; a small English-leaning dense
 embedder (Smart-Connections class, MemPalace) collapses on Korean; the strong
 rows are hybrids that combine a Korean-aware lexical leg with semantics and
-the wikilink graph. Even the strong hybrids top out around **0.18 on 2-hop
+the wikilink graph. The vector leg matters: the same hybrid goes 0.788
+(fastembed MiniLM, instant, no daemon) to 0.853 (Harrier-0.6B via Ollama) to
+0.906 (Gemini API) as the embedder gets stronger. Even the strong hybrids top
+out around **0.18 on 2-hop
 full-support** (both gold notes retrieved): the answer note is reachable only
 through a link and carries little signal of its own. That axis is the open
 challenge.
