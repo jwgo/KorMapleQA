@@ -8,7 +8,7 @@ zero API keys. Plug in your retrieval or RAG system and get a scorecard.
 Most Korean retrieval benchmarks (KorQuAD and friends) ask questions written
 *while looking at the passage*, so vocabulary overlap is total and plain BM25
 is hard to beat. KorMapleQA is built the other way: it tests how people
-actually ask — paraphrases, terse keywords, 반말/slang, typos, entity-masked
+actually ask: paraphrases, terse keywords, 반말/slang, typos, entity-masked
 references, and two-hop questions that reach the answer only through a
 wikilink. It also includes verified-absent questions to test abstention.
 
@@ -17,7 +17,7 @@ wikilink. It also includes verified-absent questions to test abstention.
 ```
 data/questions.jsonl     2,075 questions (see schema below)
 data/corpus.tar.gz       1,469 markdown notes (14 MB; the searchable corpus)
-evaluate.py              self-contained scorer — plug in your retrieve()
+evaluate.py              self-contained scorer, plug in your retrieve()
 scripts/baseline_bm25.py runnable pure-Python BM25 reference (no deps)
 scripts/generate.py      the deterministic generator (how the QA was made)
 ```
@@ -27,13 +27,13 @@ scripts/generate.py      the deterministic generator (how the QA was made)
 | type | n | what it tests |
 |---|---|---|
 | `single` | 981 | an infobox / bullet fact ("윌의 테마곡은 무엇인가?") |
-| `masked` | 215 | the entity referenced by a unique property, not its name — defeats title matching ("테마곡이 'Diffraction'인 보스의 제한 시간은?") |
+| `masked` | 215 | the entity referenced by a unique property, not its name (defeats title matching) ("테마곡이 'Diffraction'인 보스의 제한 시간은?") |
 | `twohop` | 128 | A's infobox links to B; the answer is a fact in B and is **verified absent from A** (no shortcut) |
 | `temporal` | 83 | release / debut dates |
 | `kw` | 220 | terse keyword form of a `single` question |
 | `casual` | 220 | 반말 + game slang form ("스우 브금 뭐야?") |
 | `typo` | 220 | seeded syllable-transposition typos |
-| `abstention` | 8 | content added after the 2021-03 dump — the corpus genuinely lacks the answer |
+| `abstention` | 8 | content added after the 2021-03 dump: the corpus genuinely lacks the answer |
 
 Every answerable question satisfies machine-checked invariants: the answer
 appears in the gold note(s), a masked question's identifier is unique across
@@ -72,17 +72,20 @@ python evaluate.py --predictions my_preds.jsonl
 
 ## Metrics
 
-- **doc@1 / doc@8** — a gold note is at rank 1 / in the top 8. Document-level,
-  so it compares fairly against systems that only rank documents.
-- **full-support** — for 2-hop, *both* gold notes are retrieved (the
+- **doc@1 / doc@8**, a gold note is at rank 1 / in the top 8. Document-level, so it compares fairly against systems that only rank documents.
+- **full-support**, for 2-hop, both gold notes are retrieved (the
   precondition for actually answering).
-- **answer-in-context@8** — a retrieved gold chunk actually contains the
+- **answer-in-context@8**, a retrieved gold chunk actually contains the
   answer string (needs `read_note`).
-- **abstention** — the 8 unanswerable questions are a generation/e2e test
+- **abstention**, the 8 unanswerable questions are a generation/e2e test
   (does your system say "I don't know" rather than hallucinate?), reported
   separately.
 
-## Reference scores (doc@8, full 2,067 answerable questions)
+## Reference scores
+
+A fuller cross-system comparison (BM25, dense-only, hybrids, qmd, MemPalace,
+Smart-Connections-class, mem0) with methodology and how-to-submit is in
+[RESULTS.md](RESULTS.md). Quick version (doc@8, full 2,067 answerable):
 
 | system | doc@8 | notes |
 |---|---|---|
@@ -92,7 +95,7 @@ python evaluate.py --predictions my_preds.jsonl
 | the same hybrid with Gemini embeddings | 0.91 | |
 
 2-hop full-support is ~0.14–0.19 for everything measured, including
-LLM-pipeline systems — the answer note carries almost no signal of its own
+LLM-pipeline systems: the answer note carries almost no signal of its own
 and is reachable only via the link. That axis is an open challenge; beating
 it is the point of publishing this.
 
