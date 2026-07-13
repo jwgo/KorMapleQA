@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Reference BM25 baseline for KorMapleQA — a runnable sanity check.
+"""Reference BM25 baseline for KorMapleQA - a runnable sanity check.
 
 Pure-Python BM25 over the note bodies with a Hangul character-bigram fallback
 (Korean is agglutinative; whitespace tokenisation alone under-recalls). No

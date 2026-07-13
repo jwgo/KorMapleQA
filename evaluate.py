@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""KorMapleQA evaluator — plug in any retrieval system, get the scorecard.
+"""KorMapleQA evaluator - plug in any retrieval system, get the scorecard.
 
 Self-contained: standard library only, no ML dependencies. You provide a
 `retrieve(query) -> list[str]` that returns note titles (or paths) in ranked
